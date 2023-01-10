@@ -7,7 +7,7 @@
     <div class="col-12">
       <div class="card">
         <div class="card-header">
-          <h3 class="card-title">Data Mahasiswa</h3> &nbsp;
+          <h3 class="card-title">Data Dosen</h3> &nbsp;
           <a href="{{url('/downloadpdf')}}" class="btn btn-info btn-md">Cetak</a>
           <div class="card-tools">
             <div class="input-group input-group-sm" style="width: 150px;">
@@ -26,28 +26,20 @@
           <table class="table table-hover text-nowrap">
             <thead>
               <tr>
-                <th>Nama</th>
-                <th>Gender</th>
-                <th>Alamat</th>
-                <th>No.HP</th>
-                <th>Jurusan</th>
-                <th>Email</th>
-                <th>Opsi</th>
+                <th>NIDN</th>
+                <th>Nama Dosen</th>
+                <th>Nama Mahasiswa</th>
               </tr>
             </thead>
             <tbody>
-                @foreach ($mahasiswa as $item)
+                @foreach ($dosen as $dosen)
                 <tr>
-                  <td>{{$item->nama}}</td>
-                  <td>{{$item->jenkel}}</td>
-                  <td>{{$item->alamat}}</td>
-                  <td>{{$item->hp}}</td>
-                  <td>{{$item->jurusan}}</td>
-                  <td>{{$item->email}}</td>
+                  <td>{{$dosen->nidn}}</td>
+                  <td>{{$dosen->nama_dosen}}</td>
                   <td>
-                    <a href="/mahasiswa/{{$item->id}}/delete" class="btn btn-danger" 
-                    onclick="return confirm('Anda yakin? {{$item->nama}}')">Delete</a>
-                    <a href="/mahasiswa/{{$item->id}}/edit" class="btn btn-warning">Edit</a>
+                    @foreach ($dosen->mahasiswa as $mhs)
+                        {{$mhs->nama}},
+                    @endforeach
                   </td>
                 </tr>
                 @endforeach

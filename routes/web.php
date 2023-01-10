@@ -26,6 +26,9 @@ Route::get('/register',[AuthController::class,'register'])->name('register');
 
 Route::get('/dashboard',[AdminController::class,'dashboard'])->name('dashboard');
 
+// Report PDF
+Route::get('/downloadpdf',[MahasiswaController::class,'downloadpdf']);
+
 Route::get('/mahasiswa',[MahasiswaController::class,'index']);
 Route::get('/mahasiswa/create',[MahasiswaController::class,'create']);
 Route::post('/mahasiswa/store',[MahasiswaController::class,'store']);
@@ -34,3 +37,9 @@ Route::post('/mahasiswa/{id}/update',[MahasiswaController::class,'update']);
 Route::get('/mahasiswa/{id}/delete',[MahasiswaController::class,'destroy']);
 
 Route::get('/mahasiswa/search',[MahasiswaController::class,'search']);
+
+// 1-n
+Route::get('/mahasiswa/dosen',[MahasiswaController::class,'dosen']);
+
+// n-n
+Route::get('/mahasiswa/matkul',[MahasiswaController::class,'matkul']);

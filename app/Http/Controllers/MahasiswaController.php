@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Mahasiswa;
+use App\Models\dosen;
+use App\Models\Matkul;
+use PDF;
 
 class MahasiswaController extends Controller
 {
@@ -16,6 +19,13 @@ class MahasiswaController extends Controller
     {
         $mahasiswa = Mahasiswa::all();
         return view('admin.mahasiswa.index',['mahasiswa'=>$mahasiswa]);
+    }
+    
+    public function downloadpdf()
+    {
+        $mahasiswa = Mahasiswa::all();
+        $pdf = PDF::loadview('admin/mahasiswa.index',['mahasiswa'=>$mahasiswa])->setOptions(['defaultFont'=>'sans-serif']);
+        return $pdf->download('laporan_mhs.pdf');
     }
 
     /**
@@ -74,7 +84,8 @@ class MahasiswaController extends Controller
      */
     public function edit($id)
     {
-        //
+        $mahasiswa = Mahasiswa::find($id);
+        return view('admin.mahasiswa.edit',['mahasiswa' => $mahasiswa]);
     }
 
     /**
@@ -86,7 +97,26 @@ class MahasiswaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request,[
+            'nama' => 'required',
+            'jenkel' => 'required',
+            'alamat' => 'required',
+            'hp' => 'required',
+            'jurusan' => 'required',
+            'email' => 'required'
+        ]);
+        $mahasiswa = Mahasiswa::find($id);
+        // $mahasiswa->nama = $request->nama;
+        // $mahasiswa->jenkel = $request->jenkel;
+        // $mahasiswa->alamat = $request->alamat;
+        // $mahasiswa->hp = $request->hp;
+        // $mahasiswa->jurusan = $request->jurusan;
+        // $mahasiswa->email = $request->email;
+
+        // $mahasiswa->save();
+        $mahasiswa->update($request->all());
+
+        return redirect('/mahasiswa');
     }
 
     /**
@@ -97,6 +127,32 @@ class MahasiswaController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $mahasiswa = Mahasiswa::find($id);
+        $mahasiswa->delete();
+
+        return redirect()->back();
+    }
+
+    public function search(Request $request)
+    {
+        if ($request->has('search')) {
+            $mahasiswa = Mahasiswa::where('nama','LIKE','%' .$request->search.'%')->get();
+        } else {
+            $mahasiswa = Mahasiswa::all();
+        }
+        return view('admin.mahasiswa.index',['mahasiswa'=> $mahasiswa]);
+    }
+
+    public function dosen()
+    {
+        $dosen = Dosen::all();
+        return view('admin.mahasiswa.dosen',['dosen' => $dosen]);
+    }
+
+    public function matkul()
+    {
+        $mahasiswa = Mahasiswa::get();
+        // dd($mahasiswa[0]->matkul);
+        return view('admin.mahasiswa.matkul',['mahasiswa' => $mahasiswa]);
     }
 }
